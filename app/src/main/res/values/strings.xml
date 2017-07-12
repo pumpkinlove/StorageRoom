@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">库房管理</string>
+    <string name="title_activity_main_plate">库房管理</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">设置</string>
+    <string name="action_add_worker">添加操作员</string>
+    <string name="action_get_finger">采集指纹</string>
+    <string name="task_list">任务记录</string>
+    <string name="task_exec">执行任务</string>
+    <string name="worker_list">操作员管理</string>
+    <string name="escort_list">押运员列表</string>
+    <string name="box_list">箱包列表</string>
+    <string name="about">关于</string>
+    <string name="sign_out">退出</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

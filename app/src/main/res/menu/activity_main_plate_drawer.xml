@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_task_exec"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/task_exec"/>
+        <item
+            android:id="@+id/nav_worker_list"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/worker_list" />
+        <item
+            android:id="@+id/nav_escort_list"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/escort_list" />
+        <item
+            android:id="@+id/nav_task_list"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/task_list" />
+        <item
+            android:id="@+id/nav_box_list"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/box_list"/>
+    </group>
+
+    <item android:title="其它">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_share"
+                android:title="关于" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_menu_send"
+                android:title="退出" />
+        </menu>
+    </item>
+
+</menu>
