@@ -10,8 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
+import com.miaxis.storageroom.app.Storage_App;
+import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.view.fragment.BoxListFragment;
 import com.miaxis.storageroom.view.fragment.EscortFragment;
 import com.miaxis.storageroom.view.fragment.TaskExecFragment;
@@ -45,11 +49,12 @@ public class MainPlateActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_task_exec);
+        navView.setNavigationItemSelectedListener(this);
+        navView.setCheckedItem(R.id.nav_task_exec);
         toolbar.setTitle(R.string.task_exec);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new TaskExecFragment()).commit();
+
+        initHeadView();
     }
 
     @Override
@@ -103,17 +108,32 @@ public class MainPlateActivity extends BaseActivity
                 toolbar.setTitle(R.string.task_list);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new TaskListFragment()).commit();
                 break;
-            case R.id.nav_box_list:
-                toolbar.setTitle(R.string.box_list);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new BoxListFragment()).commit();
-                break;
+//            case R.id.nav_box_list:
+//                toolbar.setTitle(R.string.box_list);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new BoxListFragment()).commit();
+//                break;
             case R.id.nav_about:
                 break;
             case R.id.nav_sign_out:
+                finish();
                 break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void initHeadView() {
+        Storage_App app = (Storage_App) getApplication();
+        Worker curWorker = app.getCurWorker();
+        if (curWorker == null) {
+            Toast.makeText(this, "登入库管员为空，请重新登入", Toast.LENGTH_SHORT).show();
+        } else {
+            TextView tvCurWorkerName = (TextView) navView.getHeaderView(0).findViewById(R.id.tv_curWorker_name);
+            TextView tvCurWorkerCode = (TextView) navView.getHeaderView(0).findViewById(R.id.tv_curWorker_code);
+            tvCurWorkerName.setText(curWorker.getName());
+            tvCurWorkerCode.setText(curWorker.getCode());
+        }
     }
 }

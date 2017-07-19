@@ -12,7 +12,22 @@ import java.util.Vector;
 public abstract class BaseComm {
 
 	protected static final int ERROR_DBACCESS = 5003;
+	protected static final int ERROR_SHIFT_NOT_EXIST = 6001;
+	protected static final int ERROR_TOTAL_TASK_NOT_EXIST = 6002;
+	protected static final int ERROR_DEPT_NOT_EXIST = 6003;
+	protected static final int ERROR_TASK_NOT_EXIST = 6004;
+	protected static final int ERROR_TASK_NOT_CHECK = 6005;
+	protected static final int ERROR_TASK_EXECUTED = 6006;
+	protected static final int ERROR_TASK_DELETED = 6007;
+	protected static final int ERROR_DATE_NOTDUE = 6008;
+	protected static final int ERROR_DATE_OVERDUE = 6009;
+	protected static final int ERROR_TIME_OVERDUE = 6010;
+	protected static final int ERROR_TASK_BOX_EXIST = 6011;
+	protected static final int ERROR_NORMAL_TASK_TOO_MANY = 6012;
+	protected static final int ERROR_INVALID_BODY = 6013;
+	protected static final int ERROR_BOX_NOT_EXIST = 6014;
 	protected static final int ERROR_WORKERCODE_EXIST = 6015;
+	protected static final int ERROR_TOTAL_TASK_EXECUTED = 6016;
 
 	public String message;
 

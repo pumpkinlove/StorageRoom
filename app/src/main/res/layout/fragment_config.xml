@@ -15,7 +15,7 @@
             android:clickable="true"
             android:hint="请填写ip地址"
             android:digits="1234567890."
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:maxLength="20"
             android:singleLine="true" />
         <EditText

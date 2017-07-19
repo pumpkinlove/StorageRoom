@@ -1,5 +1,7 @@
 package com.miaxis.storageroom.bean;
 
+import android.text.TextUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
@@ -128,6 +130,19 @@ public class Task implements Serializable {
         this.status = status;
     }
     public String getStatusName() {
+        if (TextUtils.isEmpty(statusName)) {
+            if ("1".equals(status)) {
+                return "已上报";
+            } else if ("2".equals(status)) {
+                return "已审核";
+            } else if ("3".equals(status)) {
+                return "交接途中";
+            } else if ("4".equals(status)) {
+                return "已完成";
+            } else if ("5".equals(status)) {
+                return "已注销";
+            }
+        }
         return this.statusName;
     }
     public void setStatusName(String statusName) {

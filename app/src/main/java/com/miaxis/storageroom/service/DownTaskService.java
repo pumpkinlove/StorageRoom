@@ -15,6 +15,7 @@ import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.comm.BaseComm;
 import com.miaxis.storageroom.comm.DownTaskComm;
 import com.miaxis.storageroom.comm.DownWorkerComm;
+import com.miaxis.storageroom.event.DownTaskFinishEvent;
 import com.miaxis.storageroom.event.DownWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
@@ -70,6 +71,7 @@ public class DownTaskService extends IntentService {
             StringBuilder msgSb = new StringBuilder();
             Socket socket = BaseComm.connect(config.getIp(), config.getPort(), 10000, msgSb);
             if (socket == null) {
+                EventBus.getDefault().post(new DownTaskFinishEvent(false));
                 return;
             }
             int result;
@@ -94,9 +96,12 @@ public class DownTaskService extends IntentService {
                     }
                     taskEscortDao.insertInTx(taskEscortList);
                 }
+                EventBus.getDefault().post(new DownTaskFinishEvent(true));
             } else {
+                EventBus.getDefault().post(new DownTaskFinishEvent(false));
             }
         } catch (Exception e) {
+            EventBus.getDefault().post(new DownTaskFinishEvent(false));
         }
 
     }

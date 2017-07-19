@@ -1,16 +1,24 @@
 package com.miaxis.storageroom.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Worker;
+import com.miaxis.storageroom.event.AddWorkerEvent;
 import com.miaxis.storageroom.service.AddWorkerService;
 import com.miaxis.storageroom.util.DateUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
 
@@ -30,22 +38,36 @@ public class AddWorkerActivity extends BaseActivity {
     Button btnFinger0;
     @BindView(R.id.btn_finger1)
     Button btnFinger1;
+    @BindView(R.id.btn_submit)
+    Button btnSubmit;
 
     private Worker worker;
+    private ProgressDialog pdAddWorker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_worker);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initToolBar();
         worker = new Worker();
+        pdAddWorker = new ProgressDialog(this);
+        pdAddWorker.setMessage("正在上传操作员...");
+        pdAddWorker.setCancelable(false);
     }
 
     private void initToolBar() {
         toolbar.setTitle(R.string.action_add_worker);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -72,6 +94,23 @@ public class AddWorkerActivity extends BaseActivity {
 
     @OnClick(R.id.btn_submit)
     void onSubmitClicked() {
+        if (etWorkerCode.getText().length() == 0) {
+            Toast.makeText(this, "编号不能为空，且不能重复", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (etWorkerName.getText().length() == 0) {
+            Toast.makeText(this, "姓名不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(worker.getFinger0())) {
+            Toast.makeText(this, "指纹一为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(worker.getFinger1())) {
+            Toast.makeText(this, "指纹二为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        pdAddWorker.show();
         worker.setName(etWorkerName.getText().toString());
         worker.setCode("xd-" + etWorkerCode.getText());
         worker.setOpDate(DateUtil.toAll(new Date()));
@@ -97,6 +136,18 @@ public class AddWorkerActivity extends BaseActivity {
             btnFinger1.setText("指纹二（已采集）");
             btnFinger1.setTextColor(getResources().getColor(R.color.white));
             btnFinger1.setBackgroundResource(R.drawable.green_btn_bg);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAddWorkerEvent(AddWorkerEvent e) {
+        if (e.getResult() == AddWorkerEvent.SUCCESS) {
+            pdAddWorker.dismiss();
+            Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            pdAddWorker.setMessage("添加失败!");
+            pdAddWorker.setCancelable(true);
         }
     }
 

@@ -23,4 +23,6 @@
     <color name="green_dark">#007e00</color>
     <color name="green_light">#2ebf2e</color>
     <color name="red">#f00</color>
+    <color name="orange">#ffa453</color>
+    <color name="orange_dark">#ff8d28</color>
 </resources>

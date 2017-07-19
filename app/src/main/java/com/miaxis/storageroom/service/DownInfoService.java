@@ -126,10 +126,8 @@ public class DownInfoService extends IntentService {
                     workerStamp.setStampName("WORKER_STAMP");
                     workerStamp.setOpDateTime(comm.getTimeStamp());
                     timeStampDao.insertOrReplace(workerStamp);
-                    EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.SUCCESS));
-                } else {
-                    EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.NO_WORKER));
                 }
+                EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.SUCCESS));
             } else {
                 EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.FAILURE));
             }

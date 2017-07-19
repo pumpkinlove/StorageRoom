@@ -12,13 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.adapter.EscortAdapter;
 import com.miaxis.storageroom.bean.Escort;
+import com.miaxis.storageroom.event.DownEscortEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.EscortDao;
+import com.miaxis.storageroom.service.DownInfoService;
 import com.miaxis.storageroom.view.custom.SwipeRefreshView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -40,6 +47,10 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private EscortAdapter escortAdapter;
     private List<Escort> escortList;
+    private EscortDao escortDao;
+    private int curPage = 0;
+    private int totalPage;
+    private int pageSize = 100;
 
     public EscortFragment() {
         // Required empty public constructor
@@ -52,6 +63,7 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_escort, container, false);
         unbinder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         initData();
         initView();
         return view;
@@ -61,17 +73,13 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        for (int i=0; i<20; i++) {
-            preData();
-        }
-        escortAdapter.notifyDataSetChanged();
     }
 
     private void initData() {
         GreenDaoManager manager = GreenDaoManager.getInstance(getContext());
         try {
-            EscortDao dao = manager.getEscortDao();
-            escortList = dao.loadAll();
+            escortDao = manager.getEscortDao();
+            escortList = escortDao.queryBuilder().offset(curPage * pageSize).limit(pageSize).list();
             escortAdapter = new EscortAdapter(escortList, getContext());
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,11 +97,12 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onRefresh() {
-        Log.e(TAG, "onRefresh");
+        DownInfoService.startActionDownEscort(getActivity());
     }
 
     @Override
@@ -101,10 +110,20 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Log.e(TAG, "onLoadMore");
     }
 
-    void preData() {
-        Escort e = new Escort();
-        e.setCode("xd-0000");
-        e.setName("sss");
-        escortList.add(e);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDownEscortEvent(DownEscortEvent e) {
+        srvEscort.setRefreshing(false);
+        if (e.getResult() != 0) {
+            Toast.makeText(getActivity(), "刷新押运员失败", Toast.LENGTH_SHORT).show();
+        }
+        reLoadEscort();
     }
+
+    private void reLoadEscort() {
+        List<Escort> esList = escortDao.queryBuilder().offset(curPage * pageSize).limit(pageSize).list();
+        escortList.clear();
+        escortList.addAll(esList);
+        escortAdapter.notifyDataSetChanged();
+    }
+
 }

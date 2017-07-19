@@ -71,6 +71,15 @@
             android:exported="false" />
         <service
             android:name=".service.DownTaskService"
+            android:exported="false" />
+
+        <activity android:name=".view.activity.HandOverActivity" />
+
+        <service
+            android:name=".service.ScanRfidService"
+            android:exported="false" />
+        <service
+            android:name=".service.HandOverService"
             android:exported="false"></service>
     </application>
 

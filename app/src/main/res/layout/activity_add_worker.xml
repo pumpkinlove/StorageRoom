@@ -32,6 +32,8 @@
             android:hint="请填写员工编号"
             android:id="@+id/et_worker_code"
             style="@style/style_input"
+            android:inputType="number"
+            android:digits="0123456789"
             android:layout_width="match_parent"/>
 
         <EditText

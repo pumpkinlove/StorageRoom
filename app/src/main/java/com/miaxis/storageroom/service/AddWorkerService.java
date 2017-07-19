@@ -10,6 +10,7 @@ import com.miaxis.storageroom.bean.TimeStamp;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.comm.AddWorkerComm;
 import com.miaxis.storageroom.comm.BaseComm;
+import com.miaxis.storageroom.event.AddWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.greendao.gen.TimeStampDao;
@@ -68,18 +69,19 @@ public class AddWorkerService extends IntentService {
             StringBuilder msgSb = new StringBuilder();
             Socket socket = BaseComm.connect(config.getIp(), config.getPort(), 10000, msgSb);
             if (socket == null) {
+                EventBus.getDefault().post(new AddWorkerEvent(AddWorkerEvent.FAILURE));
                 return;
             }
-            int result;
             worker.setOrgCode(config.getOrgCode());
             AddWorkerComm comm = new AddWorkerComm(socket, worker);
-            result = comm.executeComm();
+            int result = comm.executeComm();
             if (result == 0) {
-
+                EventBus.getDefault().post(new AddWorkerEvent(AddWorkerEvent.SUCCESS));
             } else {
-
+                EventBus.getDefault().post(new AddWorkerEvent(AddWorkerEvent.FAILURE));
             }
         } catch (Exception e) {
+            EventBus.getDefault().post(new AddWorkerEvent(AddWorkerEvent.FAILURE));
         }
 
     }

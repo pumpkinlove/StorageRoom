@@ -13,6 +13,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,10 +25,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:textSize="22sp"
         android:text="操作员姓名"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
+        android:textSize="22sp"
         android:id="@+id/tv_curWorker_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

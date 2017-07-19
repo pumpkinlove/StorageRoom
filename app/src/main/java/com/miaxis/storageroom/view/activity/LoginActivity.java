@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
+import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.bean.Escort;
 import com.miaxis.storageroom.bean.Task;
@@ -99,28 +100,28 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
 
     @OnClick(R.id.btn_login)
     void onLoginClicked() {
-        try {
-            GreenDaoManager manager = GreenDaoManager.getInstance(getApplicationContext());
-            ConfigDao configDao = manager.getConfigDao();
-            TimeStampDao timeStampDao = manager.getTimeStampDao();
-            EscortDao escortDao = manager.getEscortDao();
-            WorkerDao workerDao = manager.getWorkerDao();
-            TaskDao taskDao = manager.getTaskDao();
-            TaskBoxDao taskBoxDao = manager.getTaskBoxDao();
-            TaskEscortDao taskEscortDao = manager.getTaskEscortDao();
-
-            List<Worker> workerList = workerDao.loadAll();
-            List<Escort> escorts = escortDao.loadAll();
-            List<TimeStamp> timeStamps = timeStampDao.loadAll();
-            List<Task> taskList = taskDao.loadAll();
-            List<TaskBox> taskBoxList = taskBoxDao.loadAll();
-            List<TaskEscort> taskEscortList = taskEscortDao.loadAll();
+//        try {
+//            GreenDaoManager manager = GreenDaoManager.getInstance(getApplicationContext());
+//            ConfigDao configDao = manager.getConfigDao();
+//            TimeStampDao timeStampDao = manager.getTimeStampDao();
+//            EscortDao escortDao = manager.getEscortDao();
+//            WorkerDao workerDao = manager.getWorkerDao();
+//            TaskDao taskDao = manager.getTaskDao();
+//            TaskBoxDao taskBoxDao = manager.getTaskBoxDao();
+//            TaskEscortDao taskEscortDao = manager.getTaskEscortDao();
+//
+//            List<Worker> workerList = workerDao.loadAll();
+//            List<Escort> escorts = escortDao.loadAll();
+//            List<TimeStamp> timeStamps = timeStampDao.loadAll();
+//            List<Task> taskList = taskDao.loadAll();
+//            List<TaskBox> taskBoxList = taskBoxDao.loadAll();
+//            List<TaskEscort> taskEscortList = taskEscortDao.loadAll();
 
 //            DownInfoService.startActionDownEscort(this);
 //            DownTaskService.startActionDownTask(this, DateUtil.toMonthDay(new Date()));
-        } catch (Exception e) {
-
-        }
+//        } catch (Exception e) {
+//
+//        }
         FingerService.startActionVerifyWorker(this);
         fingerDialog.show(getFragmentManager(), "f");
 
@@ -173,6 +174,8 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onVerifyWorkerEvent(VerifyWorkerEvent e) {
+        Storage_App app = (Storage_App) getApplication();
+        app.setCurWorker(e.getWorker());
         if (e.isSuccess()) {
             fingerDialog.dismiss();
             startActivity(new Intent(this, MainPlateActivity.class));

@@ -18,10 +18,6 @@
             android:id="@+id/nav_task_list"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/task_list" />
-        <item
-            android:id="@+id/nav_box_list"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/box_list"/>
     </group>
 
     <item android:title="其它">

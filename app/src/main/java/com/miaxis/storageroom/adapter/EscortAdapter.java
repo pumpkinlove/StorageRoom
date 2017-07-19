@@ -69,11 +69,12 @@ public class EscortAdapter extends BaseAdapter {
         holder.tvEscortCode.setText(escort.getCode());
         holder.tvEscortName.setText(escort.getName());
         byte[] photoBytes = escort.getPhoto();
-//        if (photoBytes != null && photoBytes.length < 1) {
-//            Bitmap bmp = BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length);
-//            holder.ivEscort.setImageBitmap(bmp);
-//        }
-        holder.ivEscort.setImageResource(R.mipmap.ic_launcher);
+        if (photoBytes != null && photoBytes.length > 0) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length);
+            holder.ivEscort.setImageBitmap(bmp);
+        } else  {
+            holder.ivEscort.setImageResource(R.mipmap.ic_launcher);
+        }
         return convertView;
     }
 

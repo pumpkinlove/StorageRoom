@@ -2,6 +2,7 @@ package com.miaxis.storageroom.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by xu.nan on 2017/7/12.
@@ -9,6 +10,12 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class TaskBox {
 
+    public static final int NOT_VERIFIED = 1;
+    public static final int VERIFIED = 2;
+    public static final int REST = 3;
+
+    @Transient
+    private int status = NOT_VERIFIED;
     private String boxCode;
     private String boxRfid;
     private String taskCode;
@@ -40,4 +47,11 @@ public class TaskBox {
         this.taskCode = taskCode;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

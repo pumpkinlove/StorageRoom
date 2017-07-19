@@ -142,6 +142,7 @@ public class ConfigFragment extends Fragment {
                 configDao.update(config);
             }
             DownInfoService.startActionDownWorker(getActivity());
+            DownInfoService.startActionDownEscort(getActivity());
         } catch (Exception e) {
             Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
         }
@@ -172,9 +173,6 @@ public class ConfigFragment extends Fragment {
                 break;
             case DownWorkerEvent.FAILURE:
 
-                break;
-            case DownWorkerEvent.NO_WORKER:
-                mListener.onConfig(btnConfirm);
                 break;
         }
         pdLoadEscort.dismiss();

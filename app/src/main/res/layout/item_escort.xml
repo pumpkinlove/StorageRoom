@@ -16,6 +16,31 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="编号："
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:text="姓名："
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -23,15 +48,17 @@
 
             <TextView
                 android:id="@+id/tv_escort_code"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:layout_weight="1"
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 
             <TextView
                 android:id="@+id/tv_escort_name"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:layout_weight="1"
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 

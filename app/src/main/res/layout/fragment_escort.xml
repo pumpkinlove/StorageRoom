@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     tools:context="com.miaxis.storageroom.view.fragment.EscortFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.miaxis.storageroom.view.custom.SwipeRefreshView
+        android:id="@+id/srv_escort"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_escort"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+    </com.miaxis.storageroom.view.custom.SwipeRefreshView>
 
 </FrameLayout>

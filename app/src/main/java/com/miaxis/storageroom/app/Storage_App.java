@@ -3,6 +3,8 @@ package com.miaxis.storageroom.app;
 import android.app.Application;
 import android.widget.Toast;
 
+import com.device.Device;
+import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.event.ToastEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
@@ -19,12 +21,17 @@ public class Storage_App extends Application {
 
     private ConfigDao configDao;
 
+    private Worker curWorker;
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         EventBus.getDefault().register(this);
         GreenDaoManager.getInstance(this);
-
+        Device.openFinger();
+        Device.openRfid();
     }
 
     @Override
@@ -36,5 +43,13 @@ public class Storage_App extends Application {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onToastEvent(ToastEvent e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    public Worker getCurWorker() {
+        return curWorker;
+    }
+
+    public void setCurWorker(Worker curWorker) {
+        this.curWorker = curWorker;
     }
 }

@@ -1,17 +1,13 @@
 package com.miaxis.storageroom.event;
 
 /**
- * Created by xu.nan on 2017/7/11.
+ * Created by xu.nan on 2017/7/14.
  */
 
-public class DownWorkerEvent {
-
-    public static final int SUCCESS = 0;
-    public static final int FAILURE = 1;
-
+public class HandOverDoneEvent {
     private int result;
 
-    public DownWorkerEvent(int result) {
+    public HandOverDoneEvent(int result) {
         this.result = result;
     }
 
@@ -22,7 +18,4 @@ public class DownWorkerEvent {
     public void setResult(int result) {
         this.result = result;
     }
-
-
-
 }
