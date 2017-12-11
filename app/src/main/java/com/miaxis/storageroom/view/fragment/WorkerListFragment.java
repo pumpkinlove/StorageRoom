@@ -1,7 +1,6 @@
 package com.miaxis.storageroom.view.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import android.widget.ListView;
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.adapter.WorkerAdapter;
 import com.miaxis.storageroom.bean.Worker;
-import com.miaxis.storageroom.event.AddWorkerEvent;
-import com.miaxis.storageroom.event.DownWorkerEvent;
 import com.miaxis.storageroom.event.ToastEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.WorkerDao;

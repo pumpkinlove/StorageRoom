@@ -30,6 +30,8 @@ public class Escort implements Serializable {
     private byte[] photo;
     private String password;
     private String opDate;
+    private String opUserCode;
+    private String opUserName;
 
     @Generated(hash = 1093657904)
     public Escort(long id, String name, String finger0, String finger1,
@@ -238,5 +240,21 @@ public class Escort implements Serializable {
             default:
                 return null;
         }
+    }
+
+    public String getOpUserCode() {
+        return opUserCode;
+    }
+
+    public void setOpUserCode(String opUserCode) {
+        this.opUserCode = opUserCode;
+    }
+
+    public String getOpUserName() {
+        return opUserName;
+    }
+
+    public void setOpUserName(String opUserName) {
+        this.opUserName = opUserName;
     }
 }

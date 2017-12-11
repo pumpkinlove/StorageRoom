@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
-import com.miaxis.storageroom.bean.Worker;
-import com.miaxis.storageroom.service.AddWorkerService;
+import com.miaxis.storageroom.bean.Escort;
+import com.miaxis.storageroom.service.EscortManageService;
 import com.miaxis.storageroom.util.DateUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddWorkerActivity extends BaseActivity {
+public class EscortManageActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_add_worker)
     Toolbar toolbar;
@@ -40,20 +40,20 @@ public class AddWorkerActivity extends BaseActivity {
     @BindView(R.id.btn_submit)
     Button btnSubmit;
 
-    private Worker worker;
-    private ProgressDialog pdAddWorker;
+    private Escort mEscort;
+    private ProgressDialog pdAddEscort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_worker);
+        setContentView(R.layout.activity_add_escort);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initToolBar();
-        worker = new Worker();
-        pdAddWorker = new ProgressDialog(this);
-        pdAddWorker.setMessage("正在上传操作员...");
-        pdAddWorker.setCancelable(false);
+        mEscort = new Escort();
+        pdAddEscort = new ProgressDialog(this);
+        pdAddEscort.setMessage("正在上传押运员...");
+        pdAddEscort.setCancelable(false);
     }
 
     private void initToolBar() {
@@ -101,22 +101,19 @@ public class AddWorkerActivity extends BaseActivity {
             Toast.makeText(this, "姓名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(worker.getFinger0())) {
+        if (TextUtils.isEmpty(mEscort.getFinger0())) {
             Toast.makeText(this, "指纹一为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(worker.getFinger1())) {
+        if (TextUtils.isEmpty(mEscort.getFinger1())) {
             Toast.makeText(this, "指纹二为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        pdAddWorker.show();
-        worker.setName(etWorkerName.getText().toString());
-        worker.setCode("xd-" + etWorkerCode.getText());
-        worker.setOpDate(DateUtil.toAll(new Date()));
-        worker.setIdCard("");
-        worker.setOpUser("");
-        worker.setOpUserName("");
-        AddWorkerService.startActionAddWorker(this, worker);
+        pdAddEscort.show();
+        mEscort.setName(etWorkerName.getText().toString());
+        mEscort.setCode("xd-" + etWorkerCode.getText());
+        mEscort.setOpDate(DateUtil.toAll(new Date()));
+        EscortManageService.startActionUpdateEscort(this, mEscort);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -126,12 +123,12 @@ public class AddWorkerActivity extends BaseActivity {
         if (data == null)
             return;
         if (requestCode == 1) {
-            worker.setFinger(data.getStringExtra("finger"), 0);
+            mEscort.setFinger(data.getStringExtra("finger"), 0);
             btnFinger0.setText("指纹一（已采集）");
             btnFinger0.setTextColor(getResources().getColor(R.color.white));
             btnFinger0.setBackgroundResource(R.drawable.green_btn_bg);
         } else if (requestCode == 2) {
-            worker.setFinger(data.getStringExtra("finger"), 1);
+            mEscort.setFinger(data.getStringExtra("finger"), 1);
             btnFinger1.setText("指纹二（已采集）");
             btnFinger1.setTextColor(getResources().getColor(R.color.white));
             btnFinger1.setBackgroundResource(R.drawable.green_btn_bg);
@@ -139,14 +136,14 @@ public class AddWorkerActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAddWorkerEvent(AddWorkerEvent e) {
+    public void onAddEscortEvent(AddWorkerEvent e) {
         if (e.getResult() == AddWorkerEvent.SUCCESS) {
-            pdAddWorker.dismiss();
+            pdAddEscort.dismiss();
             Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            pdAddWorker.setMessage("添加失败!");
-            pdAddWorker.setCancelable(true);
+            pdAddEscort.setMessage("添加失败!");
+            pdAddEscort.setCancelable(true);
         }
     }
 

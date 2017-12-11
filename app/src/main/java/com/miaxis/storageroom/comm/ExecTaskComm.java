@@ -4,22 +4,19 @@ import java.net.Socket;
 import java.util.Vector;
 import com.miaxis.storageroom.bean.TaskExe;
 
-public class ExecTaskComm extends BaseComm
-{
-	private static final short FUNC_REQ_EXEC_TASK=129;
-	private static final short FUNC_RET_EXEC_TASK=8129;
+public class ExecTaskComm extends BaseComm {
+	private static final short FUNC_REQ_EXEC_TASK = 129;
+	private static final short FUNC_RET_EXEC_TASK = 8129;
 	private TaskExe task;
 	
-	public ExecTaskComm(Socket socket, TaskExe task)
-	{
+	public ExecTaskComm(Socket socket, TaskExe task) {
 		super(socket, FUNC_REQ_EXEC_TASK, FUNC_RET_EXEC_TASK);
 		this.task = task;
 	}
 
 	@Override
-	protected Vector<Byte> MakePackBody()
-	{
-		Vector<Byte> data = new Vector<Byte>();
+	protected Vector<Byte> MakePackBody() {
+		Vector<Byte> data = new Vector<>();
 		data.clear();
 
 		data.addAll(MakeField(task.getTaskcode()));
@@ -44,11 +41,9 @@ public class ExecTaskComm extends BaseComm
 	}
 
 	@Override
-	protected int fetchData(byte[] data)
-	{
+	protected int fetchData(byte[] data) {
 		int result = bytestous(data);
-		switch (result)
-		{
+		switch (result) {
 			case 0:
 				return 0;
 			case ERROR_DBACCESS:
@@ -82,7 +77,7 @@ public class ExecTaskComm extends BaseComm
 				message = "执行时间无效";
 				return -109;
 			default:
-				message = "未知应答码["+result+"]";
+				message = "未知应答码[" + result + "]";
 				return -4;
 		}
 	}

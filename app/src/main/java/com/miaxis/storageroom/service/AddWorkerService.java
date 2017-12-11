@@ -3,14 +3,12 @@ package com.miaxis.storageroom.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
-import android.util.Log;
 
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.bean.TimeStamp;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.comm.AddWorkerComm;
 import com.miaxis.storageroom.comm.BaseComm;
-import com.miaxis.storageroom.event.AddWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.greendao.gen.TimeStampDao;

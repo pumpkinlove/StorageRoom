@@ -123,7 +123,6 @@ public class MainPlateActivity extends BaseActivity
         return true;
     }
 
-
     private void initHeadView() {
         Storage_App app = (Storage_App) getApplication();
         Worker curWorker = app.getCurWorker();

@@ -3,27 +3,19 @@ package com.miaxis.storageroom.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.bean.Task;
 import com.miaxis.storageroom.bean.TaskBox;
 import com.miaxis.storageroom.bean.TaskEscort;
-import com.miaxis.storageroom.bean.TimeStamp;
-import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.comm.BaseComm;
 import com.miaxis.storageroom.comm.DownTaskComm;
-import com.miaxis.storageroom.comm.DownWorkerComm;
 import com.miaxis.storageroom.event.DownTaskFinishEvent;
-import com.miaxis.storageroom.event.DownWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.greendao.gen.TaskBoxDao;
 import com.miaxis.storageroom.greendao.gen.TaskDao;
 import com.miaxis.storageroom.greendao.gen.TaskEscortDao;
-import com.miaxis.storageroom.greendao.gen.TimeStampDao;
-import com.miaxis.storageroom.greendao.gen.WorkerDao;
 
 import org.greenrobot.eventbus.EventBus;
 

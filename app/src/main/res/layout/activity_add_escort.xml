@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_bg"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_add_worker"
+            android:title="@string/action_add_worker"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:hint="请填写押运员编号"
+            android:id="@+id/et_escort_code"
+            style="@style/style_input"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:layout_width="match_parent"/>
+
+        <EditText
+            android:hint="请填写押运员姓名"
+            android:id="@+id/et_escort_name"
+            style="@style/style_input"
+            android:layout_width="match_parent"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <Button
+                android:id="@+id/btn_finger0"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:text="指纹一（未采集）"
+                android:background="@drawable/white_btn_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btn_finger1"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:text="指纹二（未采集）"
+                android:background="@drawable/white_btn_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:text="提 交"
+            android:background="@drawable/blue_btn_bg"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

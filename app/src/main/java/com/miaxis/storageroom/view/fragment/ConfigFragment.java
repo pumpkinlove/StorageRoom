@@ -8,17 +8,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Config;
-import com.miaxis.storageroom.event.DownWorkerEvent;
+import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.service.DownInfoService;
@@ -49,7 +47,7 @@ public class ConfigFragment extends Fragment {
     Unbinder unbinder;
     private ConfigDao configDao;
     private Config config;
-    private ProgressDialog pdLoadEscort;
+    private ProgressDialog pdSaveConfig;
     private OnConfigClickListener mListener;
 
     public ConfigFragment() {
@@ -109,8 +107,7 @@ public class ConfigFragment extends Fragment {
     }
 
     void initView() {
-        pdLoadEscort = new ProgressDialog(getActivity());
-//        pdLoadEscort.setCancelable(false);
+        pdSaveConfig = new ProgressDialog(getActivity());
     }
 
     void initConfigView() {
@@ -126,8 +123,8 @@ public class ConfigFragment extends Fragment {
     @OnClick(R.id.btn_confirm)
     void onSave(View view) {
         try {
-            pdLoadEscort.setMessage("正在保存设置...");
-            pdLoadEscort.show();
+            pdSaveConfig.setMessage("正在保存设置...");
+            pdSaveConfig.show();
             if (config == null) {
                 config = new Config();
                 config.setId(1L);
@@ -141,16 +138,18 @@ public class ConfigFragment extends Fragment {
                 config.setOrgCode(etvDeptno.getText().toString());
                 configDao.update(config);
             }
+            pdSaveConfig.setMessage("正在同步员工信息...");
             DownInfoService.startActionDownWorker(getActivity());
             DownInfoService.startActionDownEscort(getActivity());
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+            pdSaveConfig.setTitle("保存失败");
+            pdSaveConfig.setCancelable(true);
         }
     }
 
     @OnClick(R.id.btn_cancel)
     void onCancel(View view) {
-        mListener.onConfig(view);
+        mListener.onConfigCancel(view);
     }
 
     @Override
@@ -161,21 +160,32 @@ public class ConfigFragment extends Fragment {
     }
 
     public interface OnConfigClickListener {
-        void onConfig(View view);
+        void onConfigSave(View view);
+        void onConfigCancel(View view);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDownWorkerEvent(DownWorkerEvent e) {
-        Log.e(TAG, "onDownWorkerEvent");
-        switch (e.getResult()) {
-            case DownWorkerEvent.SUCCESS:
-                mListener.onConfig(btnConfirm);
-                break;
-            case DownWorkerEvent.FAILURE:
+    public void onCommExecEvent(CommExecEvent e) {
+        if (e.getCommCode() == CommExecEvent.COMM_DOWN_WORKER) {
+            switch (e.getResult()) {
+                case CommExecEvent.RESULT_SUCCESS:
+                    pdSaveConfig.setMessage("信息同步完成");
+                    pdSaveConfig.dismiss();
+                    break;
+                case CommExecEvent.RESULT_EXCEPTION:
+                    pdSaveConfig.setMessage("信息同步异常");
+                    pdSaveConfig.setCancelable(true);
+                    break;
+                case CommExecEvent.RESULT_SOCKET_NULL:
+                    pdSaveConfig.setMessage("网络连接失败，请检查ip地址、端口号。");
+                    pdSaveConfig.setCancelable(true);
+                    break;
+                default:
+                    // TODO: 2017/12/11
+            }
+        } else if (e.getCommCode() == CommExecEvent.COMM_DOWN_ESCORT) {
 
-                break;
         }
-        pdLoadEscort.dismiss();
     }
 
 }

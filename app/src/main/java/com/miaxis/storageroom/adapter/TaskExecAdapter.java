@@ -55,6 +55,7 @@ public class TaskExecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (taskList != null) {
                 Task task = taskList.get(position);
                 if (task != null) {
+                    itemViewHolder.tvTaskPlateNo.setText(task.getPlateno());
                     if ("1".equals(task.getTasktype())) {
                         itemViewHolder.tvTaskType.setText("出库");
                     } else if ("2".equals(task.getTasktype())) {
@@ -101,6 +102,9 @@ public class TaskExecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     static class TaskExecViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_task_type)
         TextView tvTaskType;
+
+        @BindView(R.id.tv_task_plateno)
+        TextView tvTaskPlateNo;
 
         TaskExecViewHolder(View view) {
             super(view);

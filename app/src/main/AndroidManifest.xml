@@ -80,6 +80,12 @@
             android:exported="false" />
         <service
             android:name=".service.HandOverService"
+            android:exported="false" />
+
+        <activity android:name=".view.activity.EscortManageActivity" />
+
+        <service
+            android:name=".service.EscortManageService"
             android:exported="false"></service>
     </application>
 

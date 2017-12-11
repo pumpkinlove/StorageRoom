@@ -12,40 +12,20 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.bean.Config;
-import com.miaxis.storageroom.bean.Escort;
-import com.miaxis.storageroom.bean.Task;
-import com.miaxis.storageroom.bean.TaskBox;
-import com.miaxis.storageroom.bean.TaskEscort;
-import com.miaxis.storageroom.bean.TimeStamp;
-import com.miaxis.storageroom.bean.Worker;
-import com.miaxis.storageroom.event.DownWorkerEvent;
 import com.miaxis.storageroom.event.VerifyWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
-import com.miaxis.storageroom.greendao.gen.EscortDao;
-import com.miaxis.storageroom.greendao.gen.TaskBoxDao;
-import com.miaxis.storageroom.greendao.gen.TaskDao;
-import com.miaxis.storageroom.greendao.gen.TaskEscortDao;
-import com.miaxis.storageroom.greendao.gen.TimeStampDao;
-import com.miaxis.storageroom.greendao.gen.WorkerDao;
-import com.miaxis.storageroom.service.DownInfoService;
-import com.miaxis.storageroom.service.DownTaskService;
 import com.miaxis.storageroom.service.FingerService;
-import com.miaxis.storageroom.util.DateUtil;
 import com.miaxis.storageroom.view.custom.FingerDialog;
 import com.miaxis.storageroom.view.fragment.ConfigFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

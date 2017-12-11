@@ -14,8 +14,8 @@ import com.miaxis.storageroom.comm.BaseComm;
 import com.miaxis.storageroom.comm.CountEscortComm;
 import com.miaxis.storageroom.comm.DownEscortComm;
 import com.miaxis.storageroom.comm.DownWorkerComm;
+import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.event.DownEscortEvent;
-import com.miaxis.storageroom.event.DownWorkerEvent;
 import com.miaxis.storageroom.event.ToastEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
@@ -35,15 +35,13 @@ import java.util.List;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class DownInfoService extends IntentService {
+public class DownInfoService extends BaseService {
     private static final String TAG = "DownInfoService";
 
+    private static final String ACTION_DOWN_INFO = "com.miaxis.storageroom.service.action.ACTION_DOWN_INFO";
     private static final String ACTION_DOWN_ESCORT = "com.miaxis.storageroom.service.action.ACTION_DOWN_ESCORT";
     private static final String ACTION_DOWN_WORKER = "com.miaxis.storageroom.service.action.ACTION_DOWN_WORKER";
     private static final String ACTION_DOWN_BOX = "com.miaxis.storageroom.service.action.ACTION_DOWN_BOX";
-
-    public static final String TOTAL_PAGE_NUM = "com.miaxis.storageroom.service.extra.TOTAL_PAGE_NUM";
-    public static final String PAGE_SIZE = "com.miaxis.storageroom.service.extra.PAGE_SIZE";
 
     public DownInfoService() {
         super("DownInfoService");
@@ -52,7 +50,12 @@ public class DownInfoService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+    }
 
+    public static void startActionDownInfo(Context context) {
+        Intent intent = new Intent(context, DownInfoService.class);
+        intent.setAction(ACTION_DOWN_INFO);
+        context.startService(intent);
     }
 
     public static void startActionDownWorker(Context context) {
@@ -83,13 +86,16 @@ public class DownInfoService extends IntentService {
                 handleActionDownEscort();
             } else if (ACTION_DOWN_BOX.equals(action)) {
                 handleActionDownBox();
+            } else if (ACTION_DOWN_INFO.equals(action)) {
+                handleActionDownWorker();
+                handleActionDownEscort();
+//                handleActionDownBox();
             }
         }
     }
 
     private void handleActionDownWorker() {
         try {
-            Log.e(TAG, "handleActionDownWorker");
             GreenDaoManager manager = GreenDaoManager.getInstance(getApplicationContext());
             ConfigDao configDao = manager.getConfigDao();
             TimeStampDao timeStampDao = manager.getTimeStampDao();
@@ -109,7 +115,7 @@ public class DownInfoService extends IntentService {
             StringBuilder msgSb = new StringBuilder();
             Socket socket = BaseComm.connect(config.getIp(), config.getPort(), 10000, msgSb);
             if (socket == null) {
-                EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.FAILURE));
+                EventBus.getDefault().post(new CommExecEvent(CommExecEvent.RESULT_SOCKET_NULL, CommExecEvent.COMM_DOWN_WORKER));
                 return;
             }
             int result;
