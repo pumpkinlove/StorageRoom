@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.event.CommExecEvent;
+import com.miaxis.storageroom.event.DownEscortEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.service.DownInfoService;
@@ -149,7 +151,7 @@ public class ConfigFragment extends Fragment {
 
     @OnClick(R.id.btn_cancel)
     void onCancel(View view) {
-        mListener.onConfigCancel(view);
+        mListener.onConfigCancel();
     }
 
     @Override
@@ -160,31 +162,69 @@ public class ConfigFragment extends Fragment {
     }
 
     public interface OnConfigClickListener {
-        void onConfigSave(View view);
-        void onConfigCancel(View view);
+        void onConfigSave();
+        void onConfigCancel();
     }
+
+    private boolean workerDown = false;
+    private boolean escortDown = false;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCommExecEvent(CommExecEvent e) {
         if (e.getCommCode() == CommExecEvent.COMM_DOWN_WORKER) {
             switch (e.getResult()) {
                 case CommExecEvent.RESULT_SUCCESS:
-                    pdSaveConfig.setMessage("信息同步完成");
-                    pdSaveConfig.dismiss();
+                    workerDown = true;
+                    pdSaveConfig.setMessage("员工信息同步完成");
                     break;
                 case CommExecEvent.RESULT_EXCEPTION:
-                    pdSaveConfig.setMessage("信息同步异常");
+                    pdSaveConfig.setMessage("员工信息同步异常");
                     pdSaveConfig.setCancelable(true);
                     break;
                 case CommExecEvent.RESULT_SOCKET_NULL:
-                    pdSaveConfig.setMessage("网络连接失败，请检查ip地址、端口号。");
+                    pdSaveConfig.setMessage("网络连接失败，请检查ip地址、端口号");
                     pdSaveConfig.setCancelable(true);
                     break;
                 default:
-                    // TODO: 2017/12/11
             }
-        } else if (e.getCommCode() == CommExecEvent.COMM_DOWN_ESCORT) {
+//        } else if (e.getCommCode() == CommExecEvent.COMM_DOWN_ESCORT) {
+//            switch (e.getResult()) {
+//                case CommExecEvent.RESULT_SUCCESS:
+//                    escortDown = true;
+//                    pdSaveConfig.setMessage("押运员信息同步完成");
+//                    break;
+//                case CommExecEvent.RESULT_EXCEPTION:
+//                    pdSaveConfig.setMessage("押运员信息同步异常");
+//                    pdSaveConfig.setCancelable(true);
+//                    break;
+//                case CommExecEvent.RESULT_SOCKET_NULL:
+//                    pdSaveConfig.setMessage("网络连接失败，请检查ip地址、端口号。");
+//                    pdSaveConfig.setCancelable(true);
+//                    break;
+//                default:
+//            }
+        }
+        if (workerDown && escortDown) {
+            pdSaveConfig.setMessage("信息同步完成");
+            pdSaveConfig.dismiss();
+            mListener.onConfigSave();
+        }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDownEscortEvent(DownEscortEvent e) {
+        if (e.getResult() == 0) {
+            pdSaveConfig.setMessage("押运员信息同步完成");
+            escortDown = true;
+        } else {
+            pdSaveConfig.setMessage("押运员信息同步失败");
+            escortDown = false;
+            pdSaveConfig.setCancelable(true);
+        }
+        if (workerDown && escortDown) {
+            pdSaveConfig.setMessage("信息同步完成");
+            pdSaveConfig.dismiss();
+            mListener.onConfigSave();
         }
     }
 

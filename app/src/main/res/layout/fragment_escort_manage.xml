@@ -2,15 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.miaxis.storageroom.view.fragment.EscortFragment">
+    tools:context="com.miaxis.storageroom.view.fragment.EscortManageFragment">
 
     <com.miaxis.storageroom.view.custom.SwipeRefreshView
-        android:id="@+id/srv_escort"
+        android:id="@+id/srv_store_escort"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/lv_escort"
+            android:id="@+id/lv_store_escort"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

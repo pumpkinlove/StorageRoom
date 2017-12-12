@@ -42,10 +42,12 @@ public class SettingActivity extends BaseActivity implements ConfigFragment.OnCo
     }
 
     @Override
-    public void onConfig(View view) {
+    public void onConfigSave() {
         finish();
     }
 
-
-
+    @Override
+    public void onConfigCancel() {
+        finish();
+    }
 }

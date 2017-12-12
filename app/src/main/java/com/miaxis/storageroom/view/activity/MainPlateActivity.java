@@ -18,6 +18,7 @@ import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.view.fragment.BoxListFragment;
 import com.miaxis.storageroom.view.fragment.EscortFragment;
+import com.miaxis.storageroom.view.fragment.EscortManageFragment;
 import com.miaxis.storageroom.view.fragment.TaskExecFragment;
 import com.miaxis.storageroom.view.fragment.TaskListFragment;
 import com.miaxis.storageroom.view.fragment.WorkerListFragment;
@@ -103,6 +104,10 @@ public class MainPlateActivity extends BaseActivity
             case R.id.nav_escort_list:
                 toolbar.setTitle(R.string.escort_list);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new EscortFragment()).commit();
+                break;
+            case R.id.nav_store_escort_list:
+                toolbar.setTitle(R.string.store_escort_manage);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new EscortManageFragment()).commit();
                 break;
             case R.id.nav_task_list:
                 toolbar.setTitle(R.string.task_list);

@@ -133,12 +133,10 @@ public class DownInfoService extends BaseService {
                     workerStamp.setOpDateTime(comm.getTimeStamp());
                     timeStampDao.insertOrReplace(workerStamp);
                 }
-                EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.SUCCESS));
-            } else {
-                EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.FAILURE));
             }
+            EventBus.getDefault().post(new CommExecEvent(result, CommExecEvent.COMM_DOWN_WORKER));
         } catch (Exception e) {
-            EventBus.getDefault().post(new DownWorkerEvent(DownWorkerEvent.FAILURE));
+            EventBus.getDefault().post(new CommExecEvent(CommExecEvent.RESULT_EXCEPTION, CommExecEvent.COMM_DOWN_WORKER));
         }
     }
 

@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.adapter.WorkerAdapter;
 import com.miaxis.storageroom.bean.Worker;
+import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.event.ToastEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.WorkerDao;
@@ -49,7 +51,6 @@ public class WorkerListFragment extends Fragment implements SwipeRefreshLayout.O
     public WorkerListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +105,6 @@ public class WorkerListFragment extends Fragment implements SwipeRefreshLayout.O
         Log.e(TAG, "onViewCreated");
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -118,18 +118,28 @@ public class WorkerListFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDownWorkerEvent(DownWorkerEvent e) {
-        srvWorker.setRefreshing(false);
-        if (e.getResult() != DownWorkerEvent.SUCCESS) {
-            EventBus.getDefault().post(new ToastEvent("下载操作员列表失败"));
-        }
-        reLoadList();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAddWorkerEvent(AddWorkerEvent e) {
-        if (e.getResult() == AddWorkerEvent.SUCCESS) {
-            onRefresh();
+    public void onCommExecEvent(CommExecEvent e) {
+        if (e.getCommCode() == CommExecEvent.COMM_ADD_WORKER) {
+            switch (e.getResult()) {
+                case CommExecEvent.RESULT_SUCCESS:
+                    onRefresh();
+                    break;
+            }
+        } else if (e.getCommCode() == CommExecEvent.COMM_DOWN_WORKER) {
+            switch (e.getResult()) {
+                case CommExecEvent.RESULT_SUCCESS:
+                    srvWorker.setRefreshing(false);
+                    break;
+                case CommExecEvent.RESULT_EXCEPTION:
+                    Toast.makeText(getActivity(), "下载操作员列表异常", Toast.LENGTH_SHORT).show();
+                    break;
+                case CommExecEvent.RESULT_SOCKET_NULL:
+                    Toast.makeText(getActivity(), "网络连接失败，请检查ip地址、端口号", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(getActivity(), "下载操作员列表失败", Toast.LENGTH_SHORT).show();
+            }
+            reLoadList();
         }
     }
 

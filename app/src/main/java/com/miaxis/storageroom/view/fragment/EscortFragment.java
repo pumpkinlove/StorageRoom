@@ -1,6 +1,7 @@
 package com.miaxis.storageroom.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.miaxis.storageroom.event.DownEscortEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.EscortDao;
 import com.miaxis.storageroom.service.DownInfoService;
+import com.miaxis.storageroom.view.activity.EscortManageActivity;
 import com.miaxis.storageroom.view.custom.SwipeRefreshView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,7 +53,7 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private EscortDao escortDao;
     private int curPage = 0;
     private int totalPage;
-    private int pageSize = 100;
+    private int pageSize = 10;
 
     public EscortFragment() {
         // Required empty public constructor
@@ -84,7 +87,6 @@ public class EscortFragment extends Fragment implements SwipeRefreshLayout.OnRef
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void initView() {

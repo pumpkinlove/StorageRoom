@@ -32,12 +32,17 @@ public class Escort implements Serializable {
     private String opDate;
     private String opUserCode;
     private String opUserName;
+    private boolean isCollected;
+    private String phone;
+    private String idCard;
 
-    @Generated(hash = 1093657904)
+    @Generated(hash = 1199856996)
     public Escort(long id, String name, String finger0, String finger1,
             String finger2, String finger3, String finger4, String finger5,
             String finger6, String finger7, String finger8, String finger9,
-            String code, byte[] photo, String password, String opDate) {
+            String code, byte[] photo, String password, String opDate,
+            String opUserCode, String opUserName, boolean isCollected, String phone,
+            String idCard) {
         this.id = id;
         this.name = name;
         this.finger0 = finger0;
@@ -54,6 +59,11 @@ public class Escort implements Serializable {
         this.photo = photo;
         this.password = password;
         this.opDate = opDate;
+        this.opUserCode = opUserCode;
+        this.opUserName = opUserName;
+        this.isCollected = isCollected;
+        this.phone = phone;
+        this.idCard = idCard;
     }
 
     @Generated(hash = 295686502)
@@ -256,5 +266,37 @@ public class Escort implements Serializable {
 
     public void setOpUserName(String opUserName) {
         this.opUserName = opUserName;
+    }
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean getIsCollected() {
+        return this.isCollected;
+    }
+
+    public void setIsCollected(boolean isCollected) {
+        this.isCollected = isCollected;
     }
 }

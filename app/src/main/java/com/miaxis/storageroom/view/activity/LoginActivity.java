@@ -107,20 +107,6 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
 
     }
 
-    @Override
-    public void onConfig(View view) {
-        switch (view.getId()) {
-            case R.id.btn_confirm:
-                Log.e("login", "btn_confirm");
-                initConfig();
-                break;
-            case R.id.btn_cancel:
-                Log.e("login", "btn_cancel");
-                initConfig();
-                break;
-        }
-    }
-
     private String getVersion() {
         String versionName = "";
         try {
@@ -166,5 +152,15 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onConfigSave() {
+        initConfig();
+    }
+
+    @Override
+    public void onConfigCancel() {
+        initConfig();
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Worker;
+import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.service.AddWorkerService;
 import com.miaxis.storageroom.util.DateUtil;
 
@@ -139,14 +140,25 @@ public class AddWorkerActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAddWorkerEvent(AddWorkerEvent e) {
-        if (e.getResult() == AddWorkerEvent.SUCCESS) {
-            pdAddWorker.dismiss();
-            Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
-            pdAddWorker.setMessage("添加失败!");
-            pdAddWorker.setCancelable(true);
+    public void onCommExecEvent(CommExecEvent e) {
+        if (e.getCommCode() == CommExecEvent.COMM_ADD_WORKER) {
+            switch (e.getResult()) {
+                case CommExecEvent.RESULT_SUCCESS:
+                    pdAddWorker.dismiss();
+                    break;
+                case CommExecEvent.RESULT_EXCEPTION:
+                    pdAddWorker.setMessage("添加员工异常!");
+                    pdAddWorker.setCancelable(true);
+                    break;
+                case CommExecEvent.RESULT_SOCKET_NULL:
+                    pdAddWorker.setMessage("网络连接失败，请检查ip地址、端口号!");
+                    pdAddWorker.setCancelable(true);
+                    break;
+                default:
+                    pdAddWorker.setMessage("添加失败!");
+                    pdAddWorker.setCancelable(true);
+                    // TODO: 2017/12/11
+            }
         }
     }
 

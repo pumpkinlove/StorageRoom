@@ -40,6 +40,11 @@ public class EscortDao extends AbstractDao<Escort, Long> {
         public final static Property Photo = new Property(13, byte[].class, "photo", false, "PHOTO");
         public final static Property Password = new Property(14, String.class, "password", false, "PASSWORD");
         public final static Property OpDate = new Property(15, String.class, "opDate", false, "OP_DATE");
+        public final static Property OpUserCode = new Property(16, String.class, "opUserCode", false, "OP_USER_CODE");
+        public final static Property OpUserName = new Property(17, String.class, "opUserName", false, "OP_USER_NAME");
+        public final static Property IsCollected = new Property(18, boolean.class, "isCollected", false, "IS_COLLECTED");
+        public final static Property Phone = new Property(19, String.class, "phone", false, "PHONE");
+        public final static Property IdCard = new Property(20, String.class, "idCard", false, "ID_CARD");
     }
 
 
@@ -70,7 +75,12 @@ public class EscortDao extends AbstractDao<Escort, Long> {
                 "\"CODE\" TEXT," + // 12: code
                 "\"PHOTO\" BLOB," + // 13: photo
                 "\"PASSWORD\" TEXT," + // 14: password
-                "\"OP_DATE\" TEXT);"); // 15: opDate
+                "\"OP_DATE\" TEXT," + // 15: opDate
+                "\"OP_USER_CODE\" TEXT," + // 16: opUserCode
+                "\"OP_USER_NAME\" TEXT," + // 17: opUserName
+                "\"IS_COLLECTED\" INTEGER NOT NULL ," + // 18: isCollected
+                "\"PHONE\" TEXT," + // 19: phone
+                "\"ID_CARD\" TEXT);"); // 20: idCard
     }
 
     /** Drops the underlying database table. */
@@ -158,6 +168,27 @@ public class EscortDao extends AbstractDao<Escort, Long> {
         if (opDate != null) {
             stmt.bindString(16, opDate);
         }
+ 
+        String opUserCode = entity.getOpUserCode();
+        if (opUserCode != null) {
+            stmt.bindString(17, opUserCode);
+        }
+ 
+        String opUserName = entity.getOpUserName();
+        if (opUserName != null) {
+            stmt.bindString(18, opUserName);
+        }
+        stmt.bindLong(19, entity.getIsCollected() ? 1L: 0L);
+ 
+        String phone = entity.getPhone();
+        if (phone != null) {
+            stmt.bindString(20, phone);
+        }
+ 
+        String idCard = entity.getIdCard();
+        if (idCard != null) {
+            stmt.bindString(21, idCard);
+        }
     }
 
     @Override
@@ -239,6 +270,27 @@ public class EscortDao extends AbstractDao<Escort, Long> {
         if (opDate != null) {
             stmt.bindString(16, opDate);
         }
+ 
+        String opUserCode = entity.getOpUserCode();
+        if (opUserCode != null) {
+            stmt.bindString(17, opUserCode);
+        }
+ 
+        String opUserName = entity.getOpUserName();
+        if (opUserName != null) {
+            stmt.bindString(18, opUserName);
+        }
+        stmt.bindLong(19, entity.getIsCollected() ? 1L: 0L);
+ 
+        String phone = entity.getPhone();
+        if (phone != null) {
+            stmt.bindString(20, phone);
+        }
+ 
+        String idCard = entity.getIdCard();
+        if (idCard != null) {
+            stmt.bindString(21, idCard);
+        }
     }
 
     @Override
@@ -264,7 +316,12 @@ public class EscortDao extends AbstractDao<Escort, Long> {
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // code
             cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13), // photo
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // password
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // opDate
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // opDate
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // opUserCode
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // opUserName
+            cursor.getShort(offset + 18) != 0, // isCollected
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // phone
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20) // idCard
         );
         return entity;
     }
@@ -287,6 +344,11 @@ public class EscortDao extends AbstractDao<Escort, Long> {
         entity.setPhoto(cursor.isNull(offset + 13) ? null : cursor.getBlob(offset + 13));
         entity.setPassword(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setOpDate(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setOpUserCode(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setOpUserName(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setIsCollected(cursor.getShort(offset + 18) != 0);
+        entity.setPhone(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setIdCard(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
      }
     
     @Override
