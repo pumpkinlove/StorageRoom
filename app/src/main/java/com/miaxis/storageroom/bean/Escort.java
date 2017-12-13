@@ -225,30 +225,39 @@ public class Escort implements Serializable {
         }
     }
 
-    public String setFinger(String mFinger, int index) {
+    public void setFinger(String mFinger, int index) {
         switch (index) {
             case 0:
                 finger0 = mFinger;
+                break;
             case 1:
                 finger1 = mFinger;
+                break;
             case 2:
                 finger2 = mFinger;
+                break;
             case 3:
                 finger3 = mFinger;
+                break;
             case 4:
                 finger4 = mFinger;
+                break;
             case 5:
                 finger5 = mFinger;
+                break;
             case 6:
                 finger6 = mFinger;
+                break;
             case 7:
                 finger7 = mFinger;
+                break;
             case 8:
                 finger8 = mFinger;
+                break;
             case 9:
                 finger9 = mFinger;
+                break;
             default:
-                return null;
         }
     }
 

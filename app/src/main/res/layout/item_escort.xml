@@ -51,11 +51,12 @@
 
             <TextView
                 android:id="@+id/tv_escort_name"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:textSize="20sp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_isCollected"

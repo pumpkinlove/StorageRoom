@@ -6,6 +6,7 @@
     <string name="action_settings">设置</string>
     <string name="action_delete">删除</string>
     <string name="action_add_worker">添加库管员</string>
+    <string name="action_update_escort">更新押运员</string>
     <string name="action_get_finger">采集指纹</string>
     <string name="task_list">任务记录</string>
     <string name="task_exec">执行任务</string>

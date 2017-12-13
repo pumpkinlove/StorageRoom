@@ -145,6 +145,7 @@ public class AddWorkerActivity extends BaseActivity {
             switch (e.getResult()) {
                 case CommExecEvent.RESULT_SUCCESS:
                     pdAddWorker.dismiss();
+                    finish();
                     break;
                 case CommExecEvent.RESULT_EXCEPTION:
                     pdAddWorker.setMessage("添加员工异常!");
@@ -157,7 +158,6 @@ public class AddWorkerActivity extends BaseActivity {
                 default:
                     pdAddWorker.setMessage("添加失败!");
                     pdAddWorker.setCancelable(true);
-                    // TODO: 2017/12/11
             }
         }
     }

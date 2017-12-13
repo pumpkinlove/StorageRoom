@@ -19,18 +19,18 @@ public class DownStoreEscortComm extends BaseComm {
 
     private List<Escort> escortList;
     private String orgCode;
-    private String pageNum;
-    private String pageSize;
+    private String offset;
+    private String limit;
 
     public List<Escort> getEscortList() {
         return escortList;
     }
 
-    public DownStoreEscortComm(Socket socket, String orgCode, String pageNum, String pageSize) {
+    public DownStoreEscortComm(Socket socket, String orgCode, String offset, String limit) {
         super(socket, FUNC_REQ_DOWN_ESCORT, FUNC_RET_DOWN_ESCORT);
         this.orgCode = orgCode;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+        this.offset = offset;
+        this.limit = limit;
         escortList = new ArrayList<>();
     }
 
@@ -39,8 +39,8 @@ public class DownStoreEscortComm extends BaseComm {
         Vector<Byte> data = new Vector<>();
         data.clear();
         data.addAll(MakeField(orgCode));
-        data.addAll(MakeField(pageNum));
-        data.addAll(MakeField(pageSize));
+        data.addAll(MakeField(offset));
+        data.addAll(MakeField(limit));
         return data;
     }
 

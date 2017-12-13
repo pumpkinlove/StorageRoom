@@ -5,18 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.miaxis.storageroom.R;
+import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.bean.Escort;
+import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.comm.BaseComm;
 import com.miaxis.storageroom.comm.DeleteEscortComm;
 import com.miaxis.storageroom.comm.DownStoreEscortComm;
+import com.miaxis.storageroom.comm.UpdateEscortComm;
 import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
@@ -90,17 +95,16 @@ public class EscortManageActivity extends BaseActivity {
 
     private void initView() {
         pdManageEscort = new ProgressDialog(this);
-        pdManageEscort.setMessage("正在上传押运员...");
         pdManageEscort.setCancelable(false);
 
         if (mEscort != null) {
             etEscortName.setText(mEscort.getName());
-            etEscortCode.setText(mEscort.getCode());
+            etEscortCode.setText(mEscort.getCode().split("-")[1]);
         }
     }
 
     private void initToolBar() {
-        toolbarAddEscort.setTitle(R.string.action_add_worker);
+        toolbarAddEscort.setTitle(R.string.action_update_escort);
         setSupportActionBar(toolbarAddEscort);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -137,7 +141,7 @@ public class EscortManageActivity extends BaseActivity {
     }
 
     @OnClick(R.id.btn_submit)
-    void onSubmitClicked() {
+    void onSubmitClicked(View view) {
         if (etEscortCode.getText().length() == 0) {
             Toast.makeText(this, "编号不能为空，且不能重复", Toast.LENGTH_SHORT).show();
             return;
@@ -146,19 +150,22 @@ public class EscortManageActivity extends BaseActivity {
             Toast.makeText(this, "姓名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mEscort.getFinger0())) {
-            Toast.makeText(this, "指纹一为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(mEscort.getFinger1())) {
-            Toast.makeText(this, "指纹二为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        pdManageEscort.show();
+//        if (TextUtils.isEmpty(mEscort.getFinger0())) {
+//            Toast.makeText(this, "指纹一为空", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEscort.getFinger1())) {
+//            Toast.makeText(this, "指纹二为空", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+        hideSoftInput(view);
         mEscort.setName(etEscortName.getText().toString());
         mEscort.setCode("xd-" + etEscortCode.getText());
         mEscort.setOpDate(DateUtil.toAll(new Date()));
-        EscortManageService.startActionUpdateEscort(this, mEscort);
+        Worker curWorker = ((Storage_App)getApplicationContext()).getCurWorker();
+        mEscort.setOpUserCode(curWorker.getCode());
+        mEscort.setOpUserName(curWorker.getName());
+        updateEscort(mEscort);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -232,6 +239,48 @@ public class EscortManageActivity extends BaseActivity {
             return -1;
         }
         DeleteEscortComm comm = new DeleteEscortComm(socket, esCode);
+        return comm.executeComm();
+    }
+
+    private void updateEscort(Escort escort) {
+        Observable
+                .just(escort)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Escort>() {
+                    @Override
+                    public void accept(Escort escort) throws Exception {
+                        pdManageEscort.setMessage("正在更新" + escort.getName() + "的信息");
+                        pdManageEscort.show();
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Function<Escort, Integer>() {
+                    @Override
+                    public Integer apply(Escort escort) throws Exception {
+                        return doUpdateEscortComm(escort);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer result) throws Exception {
+                        pdManageEscort.setCancelable(true);
+                        if (result == 0) {
+                            pdManageEscort.setMessage("更新完成");
+                        } else {
+                            pdManageEscort.setMessage("更新失败");
+                        }
+                    }
+                });
+    }
+
+    private int doUpdateEscortComm(Escort escort) {
+        StringBuilder msgSb = new StringBuilder();
+        Socket socket = BaseComm.connect(config.getIp(), config.getPort(), 10000, msgSb);
+        if (socket == null) {
+            return -1;
+        }
+        UpdateEscortComm comm = new UpdateEscortComm(socket, escort);
         return comm.executeComm();
     }
 

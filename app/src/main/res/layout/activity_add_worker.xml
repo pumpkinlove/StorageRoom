@@ -34,6 +34,7 @@
             style="@style/style_input"
             android:inputType="number"
             android:digits="0123456789"
+            android:maxLength="4"
             android:layout_width="match_parent"/>
 
         <EditText

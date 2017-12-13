@@ -3,6 +3,7 @@ package com.miaxis.storageroom.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.andview.refreshview.XRefreshView;
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.adapter.EscortAdapter;
 import com.miaxis.storageroom.adapter.StoreEscortAdapter;
@@ -45,13 +47,13 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EscortManageFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshView.OnLoadMoreListener, AdapterView.OnItemClickListener {
+public class EscortManageFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
     @BindView(R.id.lv_store_escort)
     ListView lvStoreEscort;
-    @BindView(R.id.srv_store_escort)
-    SwipeRefreshView srvStoreEscort;
+    @BindView(R.id.xrv_store_escort)
+    XRefreshView xrv_store_escort;
     Unbinder unbinder;
 
     private StoreEscortAdapter escortAdapter;
@@ -78,6 +80,11 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void initData() {
         GreenDaoManager manager = GreenDaoManager.getInstance(getContext());
         ConfigDao configDao = null;
@@ -92,11 +99,38 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
     }
 
     private void initView() {
-        lvStoreEscort.addFooterView(View.inflate(getContext(), R.layout.view_footer, null));
         lvStoreEscort.setAdapter(escortAdapter);
         lvStoreEscort.setOnItemClickListener(this);
-        srvStoreEscort.setOnRefreshListener(this);
-        srvStoreEscort.setOnLoadMoreListener(this);
+        xrv_store_escort.setPullRefreshEnable(true);
+        xrv_store_escort.setPullLoadEnable(true);
+        xrv_store_escort.setAutoLoadMore(true);
+        xrv_store_escort.setAutoRefresh(true);
+        xrv_store_escort.setXRefreshViewListener(new XRefreshView.XRefreshViewListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+
+            @Override
+            public void onRefresh(boolean isPullDown) {
+
+            }
+
+            @Override
+            public void onLoadMore(boolean isSilence) {
+                loadMore();
+            }
+
+            @Override
+            public void onRelease(float direction) {
+
+            }
+
+            @Override
+            public void onHeaderMove(double headerMovePercent, int offsetY) {
+
+            }
+        });
     }
 
     @Override
@@ -105,10 +139,9 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
         unbinder.unbind();
     }
 
-    @Override
-    public void onRefresh() {
+    public void refresh() {
         escortList.clear();
-        curPage = 1;
+        curPage = 0;
         Observable
                 .just(curPage)
                 .map(new Function<Integer, List<Escort>>() {
@@ -122,17 +155,18 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
                 .subscribe(new Consumer<List<Escort>>() {
                     @Override
                     public void accept(List<Escort> escorts) throws Exception {
-                        escortList.addAll(escorts);
-                        escortAdapter.notifyDataSetChanged();
-                        srvStoreEscort.setRefreshing(false);
-                        curPage ++;
+                        if (escorts.size() > 0) {
+                            curPage ++;
+                            escortList.addAll(escorts);
+                            escortAdapter.notifyDataSetChanged();
+                        }
+                        xrv_store_escort.stopRefresh();
                     }
                 });
     }
 
-    @Override
-    public void onLoadMore() {
-        Log.e("eeee", "loadmore");
+    public void loadMore() {
+        Log.e("loadMore", "curPage ------" + curPage );
         Observable
                 .just(curPage)
                 .map(new Function<Integer, List<Escort>>() {
@@ -146,11 +180,12 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
                 .subscribe(new Consumer<List<Escort>>() {
                     @Override
                     public void accept(List<Escort> escorts) throws Exception {
-                        escortList.addAll(escorts);
-                        escortAdapter.notifyDataSetChanged();
-                        srvStoreEscort.setRefreshing(false);
-                        srvStoreEscort.setLoading(false);
-                        curPage ++;
+                        if (escorts.size() > 0) {
+                            curPage ++;
+                            escortList.addAll(escorts);
+                            escortAdapter.notifyDataSetChanged();
+                        }
+                        xrv_store_escort.stopLoadMore();
                     }
                 });
     }
@@ -170,7 +205,7 @@ public class EscortManageFragment extends Fragment implements SwipeRefreshLayout
             return new ArrayList<>();
         }
         int result;
-        DownStoreEscortComm comm = new DownStoreEscortComm(socket, config.getOrgCode(), pageNum+"", pageSize+"");
+        DownStoreEscortComm comm = new DownStoreEscortComm(socket, config.getOrgCode(), pageNum * pageSize + 1+"", pageSize+"");
         result = comm.executeComm();
         if (result == 0) {
             return comm.getEscortList();

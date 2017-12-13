@@ -15,7 +15,7 @@ public class UpdateEscortComm extends BaseComm {
 		return escort;
 	}
 
-	public UpdateEscortComm(Socket socket, Escort escort){
+	public UpdateEscortComm(Socket socket, Escort escort) {
 		super(socket, FUNC_REQ_UPDATE_ESCORT, FUNC_RET_UPDATE_ESCORT);
 		this.escort = escort;
 	}
@@ -26,7 +26,12 @@ public class UpdateEscortComm extends BaseComm {
 		data.clear();
 		
 		data.addAll(MakeField(escort.getName()));
-		// TODO: 2017/12/11
+		data.addAll(MakeField(escort.getOpDate()));
+		data.addAll(MakeField(escort.getCode()));
+		data.addAll(MakeField(escort.getFinger0()));
+		data.addAll(MakeField(escort.getFinger1()));
+		data.addAll(MakeField(escort.getOpUserCode()));
+		data.addAll(MakeField(escort.getOpUserName()));
 		return data;
 	}
 	
