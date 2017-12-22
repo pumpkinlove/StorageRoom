@@ -19,11 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class Storage_App extends Application {
 
-    private ConfigDao configDao;
-
     private Worker curWorker;
-
-
 
     @Override
     public void onCreate() {

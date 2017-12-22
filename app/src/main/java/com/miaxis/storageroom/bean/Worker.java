@@ -3,6 +3,7 @@ package com.miaxis.storageroom.bean;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ public class Worker implements Serializable {
     @Id
     private long id;
     private String name;
+    @Unique
     private String code;
     private String orgCode;
     private String phone;

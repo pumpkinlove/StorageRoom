@@ -7,20 +7,25 @@ import com.miaxis.storageroom.bean.Worker;
  */
 
 public class VerifyWorkerEvent {
-    private boolean success;
+
+    public static final int NO_WORKER = -1;
+    public static final int SUCCESS = 0;
+    public static final int FAIL = -2;
+
+    private int result;
     private Worker worker;
 
-    public VerifyWorkerEvent(boolean success, Worker worker) {
-        this.success = success;
+    public VerifyWorkerEvent(int result, Worker worker) {
+        this.result = result;
         this.worker = worker;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public int getResult() {
+        return result;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setResult(int result) {
+        this.result = result;
     }
 
     public Worker getWorker() {

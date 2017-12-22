@@ -105,16 +105,16 @@ public class FingerService extends IntentService {
 
     private void handleActionVerifyWorker() {
         try {
-            String curFinger = getFinger();
-            if (TextUtils.isEmpty(curFinger)) {
-                EventBus.getDefault().post(new VerifyWorkerEvent(false, null));
-                return;
-            }
             GreenDaoManager manager = GreenDaoManager.getInstance(this);
             WorkerDao workerDao = manager.getWorkerDao();
             List<Worker> workerList = workerDao.loadAll();
             if (null == workerList || workerList.size() == 0) {
-                EventBus.getDefault().post(new VerifyWorkerEvent(false, null));
+                EventBus.getDefault().post(new VerifyWorkerEvent(VerifyWorkerEvent.NO_WORKER, null));
+                return;
+            }
+            String curFinger = getFinger();
+            if (TextUtils.isEmpty(curFinger)) {
+                EventBus.getDefault().post(new VerifyWorkerEvent(VerifyWorkerEvent.FAIL, null));
                 return;
             }
             for (int i=0; i<workerList.size(); i++) {
@@ -125,14 +125,14 @@ public class FingerService extends IntentService {
                     }
                     int result = Device.verifyFinger(mFinger, curFinger, 3);
                     if (result == 0) {
-                        EventBus.getDefault().post(new VerifyWorkerEvent(true, workerList.get(i)));
+                        EventBus.getDefault().post(new VerifyWorkerEvent(VerifyWorkerEvent.SUCCESS, workerList.get(i)));
                         return;
                     }
                 }
             }
-            EventBus.getDefault().post(new VerifyWorkerEvent(false, null));
+            EventBus.getDefault().post(new VerifyWorkerEvent(VerifyWorkerEvent.FAIL, null));
         } catch (Exception e) {
-            EventBus.getDefault().post(new VerifyWorkerEvent(false, null));
+            EventBus.getDefault().post(new VerifyWorkerEvent(VerifyWorkerEvent.FAIL, null));
         }
     }
 

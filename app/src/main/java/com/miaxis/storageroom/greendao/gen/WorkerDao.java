@@ -61,7 +61,7 @@ public class WorkerDao extends AbstractDao<Worker, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"WORKER\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
                 "\"NAME\" TEXT," + // 1: name
-                "\"CODE\" TEXT," + // 2: code
+                "\"CODE\" TEXT UNIQUE ," + // 2: code
                 "\"ORG_CODE\" TEXT," + // 3: orgCode
                 "\"PHONE\" TEXT," + // 4: phone
                 "\"ID_CARD\" TEXT," + // 5: idCard

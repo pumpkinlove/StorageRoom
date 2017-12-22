@@ -3,6 +3,7 @@ package com.miaxis.storageroom.view.custom;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.miaxis.storageroom.R;
+import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.event.DeviceCancelEvent;
 import com.miaxis.storageroom.event.VerifyWorkerEvent;
+import com.miaxis.storageroom.view.activity.MainPlateActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,12 +88,17 @@ public class FingerDialog extends DialogFragment {
     public void onVerifyWorkerEvent(VerifyWorkerEvent e) {
         gifFinger.setVisibility(View.GONE);
         ivFingerResult.setVisibility(View.VISIBLE);
-        if (e.isSuccess()) {
-            ivFingerResult.setImageBitmap(bmpFingerSuccess);
-            tvShowInfo.setText("比对通过");
-        } else {
-            ivFingerResult.setImageBitmap(bmpFingerFail);
-            tvShowInfo.setText("比对失败");
+        switch (e.getResult()) {
+            case VerifyWorkerEvent.SUCCESS:
+                ivFingerResult.setImageBitmap(bmpFingerSuccess);
+                tvShowInfo.setText("比对通过");
+                break;
+            case VerifyWorkerEvent.FAIL:
+                ivFingerResult.setImageBitmap(bmpFingerFail);
+                tvShowInfo.setText("比对失败");
+                break;
+            case VerifyWorkerEvent.NO_WORKER:
+                break;
         }
     }
 

@@ -16,7 +16,6 @@ import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.adapter.WorkerAdapter;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.event.CommExecEvent;
-import com.miaxis.storageroom.event.ToastEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.WorkerDao;
 import com.miaxis.storageroom.service.DownInfoService;
@@ -126,9 +125,9 @@ public class WorkerListFragment extends Fragment implements SwipeRefreshLayout.O
                     break;
             }
         } else if (e.getCommCode() == CommExecEvent.COMM_DOWN_WORKER) {
+            srvWorker.setRefreshing(false);
             switch (e.getResult()) {
                 case CommExecEvent.RESULT_SUCCESS:
-                    srvWorker.setRefreshing(false);
                     break;
                 case CommExecEvent.RESULT_EXCEPTION:
                     Toast.makeText(getActivity(), "下载操作员列表异常", Toast.LENGTH_SHORT).show();

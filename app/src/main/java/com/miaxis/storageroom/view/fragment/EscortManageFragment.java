@@ -83,6 +83,7 @@ public class EscortManageFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onResume() {
         super.onResume();
+        xrv_store_escort.startRefresh();
     }
 
     private void initData() {
@@ -104,7 +105,7 @@ public class EscortManageFragment extends Fragment implements AdapterView.OnItem
         xrv_store_escort.setPullRefreshEnable(true);
         xrv_store_escort.setPullLoadEnable(true);
         xrv_store_escort.setAutoLoadMore(true);
-        xrv_store_escort.setAutoRefresh(true);
+        xrv_store_escort.setAutoRefresh(false);
         xrv_store_escort.setXRefreshViewListener(new XRefreshView.XRefreshViewListener() {
             @Override
             public void onRefresh() {

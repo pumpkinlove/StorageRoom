@@ -10,10 +10,10 @@
             android:id="@+id/nav_worker_list"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/worker_list" />
-        <item
-            android:id="@+id/nav_escort_list"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/escort_list" />
+        <!--<item-->
+            <!--android:id="@+id/nav_escort_list"-->
+            <!--android:icon="@drawable/ic_menu_slideshow"-->
+            <!--android:title="@string/escort_list" />-->
         <item
             android:id="@+id/nav_store_escort_list"
             android:icon="@drawable/ic_menu_slideshow"

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +17,18 @@ import android.widget.Toast;
 import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.bean.Worker;
-import com.miaxis.storageroom.view.fragment.BoxListFragment;
-import com.miaxis.storageroom.view.fragment.EscortFragment;
+import com.miaxis.storageroom.event.CommExecEvent;
+import com.miaxis.storageroom.greendao.GreenDaoManager;
+import com.miaxis.storageroom.greendao.gen.WorkerDao;
+import com.miaxis.storageroom.view.custom.SimpleDialog;
 import com.miaxis.storageroom.view.fragment.EscortManageFragment;
 import com.miaxis.storageroom.view.fragment.TaskExecFragment;
 import com.miaxis.storageroom.view.fragment.TaskListFragment;
 import com.miaxis.storageroom.view.fragment.WorkerListFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +50,7 @@ public class MainPlateActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plate);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle (
@@ -64,7 +72,21 @@ public class MainPlateActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            final SimpleDialog sd = new SimpleDialog();
+            sd.setMessage("您确定要退出吗？");
+            sd.setConfirmListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            sd.setCancelListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sd.dismiss();
+                }
+            });
+            sd.show(getFragmentManager(), "logOut");
         }
     }
 
@@ -91,7 +113,6 @@ public class MainPlateActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.nav_task_exec:
                 toolbar.setTitle(R.string.task_exec);
@@ -101,10 +122,10 @@ public class MainPlateActivity extends BaseActivity
                 toolbar.setTitle(R.string.worker_list);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new WorkerListFragment()).commit();
                 break;
-            case R.id.nav_escort_list:
-                toolbar.setTitle(R.string.escort_list);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new EscortFragment()).commit();
-                break;
+//            case R.id.nav_escort_list:
+//                toolbar.setTitle(R.string.escort_list);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new EscortFragment()).commit();
+//                break;
             case R.id.nav_store_escort_list:
                 toolbar.setTitle(R.string.store_escort_manage);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fl_main, new EscortManageFragment()).commit();
@@ -139,5 +160,33 @@ public class MainPlateActivity extends BaseActivity
             tvCurWorkerName.setText(curWorker.getName());
             tvCurWorkerCode.setText(curWorker.getCode());
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCommExecEvent(CommExecEvent e) {
+        Storage_App app = (Storage_App) getApplication();
+        Worker curWorker = app.getCurWorker();
+        if (curWorker == null && e.getCommCode() == CommExecEvent.COMM_ADD_WORKER) {
+            if (e.getResult() == CommExecEvent.RESULT_SUCCESS) {
+                GreenDaoManager manager = GreenDaoManager.getInstance(this);
+                try {
+                    WorkerDao workerDao = manager.getWorkerDao();
+                    curWorker = workerDao.loadAll().get(0);
+                    app.setCurWorker(curWorker);
+                    TextView tvCurWorkerName = (TextView) navView.getHeaderView(0).findViewById(R.id.tv_curWorker_name);
+                    TextView tvCurWorkerCode = (TextView) navView.getHeaderView(0).findViewById(R.id.tv_curWorker_code);
+                    tvCurWorkerName.setText(curWorker.getName());
+                    tvCurWorkerCode.setText(curWorker.getCode());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

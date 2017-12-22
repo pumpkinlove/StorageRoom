@@ -230,12 +230,14 @@ public class TaskExecFragment extends Fragment implements SwipeRefreshLayout.OnR
         final List<Worker> workerList = workerDao.loadAll();
         if (null == workerList || workerList.size() < 2) {
             EventBus.getDefault().post(new ToastEvent("库管员少于两人， 无法进行交接"));
+            dialog.dismiss();
             return;
         } else {
             Storage_App app = (Storage_App) getActivity().getApplication();
             Worker curWorker = app.getCurWorker();
             if (curWorker == null) {
                 EventBus.getDefault().post(new ToastEvent("当前库管员为空， 请重新登入"));
+                dialog.dismiss();
                 return;
             } else {
                 for (int i=0; i<workerList.size(); i++) {

@@ -14,6 +14,7 @@ import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.service.AddWorkerService;
+import com.miaxis.storageroom.util.Constants;
 import com.miaxis.storageroom.util.DateUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,8 +42,9 @@ public class AddWorkerActivity extends BaseActivity {
     @BindView(R.id.btn_submit)
     Button btnSubmit;
 
-    private Worker worker;
     private ProgressDialog pdAddWorker;
+    private String finger0;
+    private String finger1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class AddWorkerActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initToolBar();
-        worker = new Worker();
+
         pdAddWorker = new ProgressDialog(this);
         pdAddWorker.setMessage("正在上传操作员...");
         pdAddWorker.setCancelable(false);
@@ -102,17 +104,20 @@ public class AddWorkerActivity extends BaseActivity {
             Toast.makeText(this, "姓名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(worker.getFinger0())) {
+        if (TextUtils.isEmpty(finger0)) {
             Toast.makeText(this, "指纹一为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(worker.getFinger1())) {
+        if (TextUtils.isEmpty(finger1)) {
             Toast.makeText(this, "指纹二为空", Toast.LENGTH_SHORT).show();
             return;
         }
         pdAddWorker.show();
+        Worker worker = new Worker();
+        worker.setFinger0(finger0);
+        worker.setFinger1(finger1);
         worker.setName(etWorkerName.getText().toString());
-        worker.setCode("xd-" + etWorkerCode.getText());
+        worker.setCode(Constants.SYS_CODE + "-" + etWorkerCode.getText());
         worker.setOpDate(DateUtil.toAll(new Date()));
         worker.setIdCard("");
         worker.setOpUser("");
@@ -127,12 +132,12 @@ public class AddWorkerActivity extends BaseActivity {
         if (data == null)
             return;
         if (requestCode == 1) {
-            worker.setFinger(data.getStringExtra("finger"), 0);
+            finger0 = data.getStringExtra("finger");
             btnFinger0.setText("指纹一（已采集）");
             btnFinger0.setTextColor(getResources().getColor(R.color.white));
             btnFinger0.setBackgroundResource(R.drawable.green_btn_bg);
         } else if (requestCode == 2) {
-            worker.setFinger(data.getStringExtra("finger"), 1);
+            finger1 = data.getStringExtra("finger");
             btnFinger1.setText("指纹二（已采集）");
             btnFinger1.setTextColor(getResources().getColor(R.color.white));
             btnFinger1.setBackgroundResource(R.drawable.green_btn_bg);

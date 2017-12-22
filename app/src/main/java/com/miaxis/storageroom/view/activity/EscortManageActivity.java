@@ -26,6 +26,7 @@ import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.service.EscortManageService;
+import com.miaxis.storageroom.util.Constants;
 import com.miaxis.storageroom.util.DateUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -160,9 +161,13 @@ public class EscortManageActivity extends BaseActivity {
 //        }
         hideSoftInput(view);
         mEscort.setName(etEscortName.getText().toString());
-        mEscort.setCode("xd-" + etEscortCode.getText());
+        mEscort.setCode(Constants.SYS_CODE + "-" + etEscortCode.getText());
         mEscort.setOpDate(DateUtil.toAll(new Date()));
         Worker curWorker = ((Storage_App)getApplicationContext()).getCurWorker();
+        if (curWorker == null) {
+            Toast.makeText(this, "登入操作员为空，请重新登入", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mEscort.setOpUserCode(curWorker.getCode());
         mEscort.setOpUserName(curWorker.getName());
         updateEscort(mEscort);
@@ -267,6 +272,8 @@ public class EscortManageActivity extends BaseActivity {
                         pdManageEscort.setCancelable(true);
                         if (result == 0) {
                             pdManageEscort.setMessage("更新完成");
+                            pdManageEscort.dismiss();
+                            finish();
                         } else {
                             pdManageEscort.setMessage("更新失败");
                         }

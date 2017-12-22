@@ -138,8 +138,8 @@ public class GetFingerActivity extends BaseActivity {
         byte[] message = new byte[100];
         byte[][] tz = new byte[3][256];
         byte[] mb = new byte[256];
-        Device.openFinger();
-        Device.openRfid();
+//        Device.openFinger();
+//        Device.openRfid();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -203,8 +203,8 @@ public class GetFingerActivity extends BaseActivity {
         }
         String str = new String(Base64.encode(mb, Base64.NO_WRAP));
         showThreadTip("采集指纹成功!");
-        Device.closeFinger();
-        Device.closeRfid();
+//        Device.closeFinger();
+//        Device.closeRfid();
         closeThread(str);
     }
 

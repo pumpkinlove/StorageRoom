@@ -14,8 +14,9 @@
             android:layout_width="match_parent"
             android:clickable="true"
             android:hint="请填写ip地址"
+            android:inputType="number"
             android:digits="1234567890."
-            android:inputType="numberDecimal"
+
             android:maxLength="20"
             android:singleLine="true" />
         <EditText
@@ -35,8 +36,9 @@
             android:clickable="true"
             android:hint="请填写机构编号"
             android:maxLength="10"
-            android:digits="0123456789"
             android:inputType="number"
+            android:digits="0123456789"
+
             android:singleLine="true" />
         <LinearLayout
             android:layout_marginTop="10dp"

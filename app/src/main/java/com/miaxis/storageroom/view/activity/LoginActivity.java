@@ -80,31 +80,8 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
 
     @OnClick(R.id.btn_login)
     void onLoginClicked() {
-//        try {
-//            GreenDaoManager manager = GreenDaoManager.getInstance(getApplicationContext());
-//            ConfigDao configDao = manager.getConfigDao();
-//            TimeStampDao timeStampDao = manager.getTimeStampDao();
-//            EscortDao escortDao = manager.getEscortDao();
-//            WorkerDao workerDao = manager.getWorkerDao();
-//            TaskDao taskDao = manager.getTaskDao();
-//            TaskBoxDao taskBoxDao = manager.getTaskBoxDao();
-//            TaskEscortDao taskEscortDao = manager.getTaskEscortDao();
-//
-//            List<Worker> workerList = workerDao.loadAll();
-//            List<Escort> escorts = escortDao.loadAll();
-//            List<TimeStamp> timeStamps = timeStampDao.loadAll();
-//            List<Task> taskList = taskDao.loadAll();
-//            List<TaskBox> taskBoxList = taskBoxDao.loadAll();
-//            List<TaskEscort> taskEscortList = taskEscortDao.loadAll();
-
-//            DownInfoService.startActionDownEscort(this);
-//            DownTaskService.startActionDownTask(this, DateUtil.toMonthDay(new Date()));
-//        } catch (Exception e) {
-//
-//        }
         FingerService.startActionVerifyWorker(this);
         fingerDialog.show(getFragmentManager(), "f");
-
     }
 
     private String getVersion() {
@@ -140,11 +117,20 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onVerifyWorkerEvent(VerifyWorkerEvent e) {
-        Storage_App app = (Storage_App) getApplication();
-        app.setCurWorker(e.getWorker());
-        if (e.isSuccess()) {
-            fingerDialog.dismiss();
-            startActivity(new Intent(this, MainPlateActivity.class));
+        fingerDialog.setCancelable(true);
+        switch (e.getResult()) {
+            case VerifyWorkerEvent.SUCCESS:
+                Storage_App app = (Storage_App) getApplication();
+                app.setCurWorker(e.getWorker());
+                fingerDialog.dismiss();
+                startActivity(new Intent(this, MainPlateActivity.class));
+                break;
+            case VerifyWorkerEvent.FAIL:
+                break;
+            case VerifyWorkerEvent.NO_WORKER:
+                fingerDialog.dismiss();
+                startActivity(new Intent(this, MainPlateActivity.class));
+                break;
         }
     }
 
