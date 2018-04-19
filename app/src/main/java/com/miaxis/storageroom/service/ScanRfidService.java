@@ -66,7 +66,7 @@ public class ScanRfidService extends IntentService {
                     EventBus.getDefault().post(new ToastEvent("扫描失败：" + new String(errmsg, "GBK").trim()));
                     continue;
                 }
-                String boxRfids = new String(tids).trim();
+                String boxRfids = new String(epcids).trim();
                 EventBus.getDefault().post(new ScanBoxEvent(boxRfids));
             }
         } catch (Exception e) {

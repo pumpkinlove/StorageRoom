@@ -59,7 +59,6 @@ public class EscortManageFragment extends Fragment implements AdapterView.OnItem
     private StoreEscortAdapter escortAdapter;
     private List<Escort> escortList;
     private int curPage = 0;
-    private int totalPage;
     private final static int PAGE_SIZE = 10;
     private Config config;
 

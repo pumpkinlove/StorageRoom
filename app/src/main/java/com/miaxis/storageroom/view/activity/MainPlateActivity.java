@@ -96,12 +96,13 @@ public class MainPlateActivity extends BaseActivity
         return true;
     }
 
+    private static final int REQUEST_CODE_CONFIG = 1;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingActivity.class));
+            startActivityForResult(new Intent(this, SettingActivity.class), REQUEST_CODE_CONFIG);
             return true;
         } else if (id == R.id.action_add_worker) {
             startActivity(new Intent(this, AddWorkerActivity.class));
@@ -188,5 +189,14 @@ public class MainPlateActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_CODE_CONFIG == requestCode) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
     }
 }

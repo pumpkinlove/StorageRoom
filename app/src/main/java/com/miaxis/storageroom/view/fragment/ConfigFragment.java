@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,13 +19,17 @@ import com.miaxis.storageroom.R;
 import com.miaxis.storageroom.bean.Config;
 import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.event.DownEscortEvent;
+import com.miaxis.storageroom.greendao.GreenDaoContext;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
+import com.miaxis.storageroom.greendao.gen.DaoMaster;
 import com.miaxis.storageroom.service.DownInfoService;
+import com.miaxis.storageroom.view.custom.SimpleDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.greendao.database.Database;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -153,6 +158,35 @@ public class ConfigFragment extends Fragment {
         mListener.onConfigCancel();
     }
 
+    @OnClick(R.id.btn_init)
+    void onInit() {
+        final SimpleDialog sd = new SimpleDialog();
+        sd.setMessage("恢复出厂设置将清除所有数据，确定要恢复吗？");
+        sd.setConfirmListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(new GreenDaoContext(getActivity()), "StorageRoom.db", null);
+                Database db = helper.getWritableDb();
+                DaoMaster.dropAllTables(db, true);
+                DaoMaster.createAllTables(db, false);
+                config = null;
+                etvIp.setText("");
+                etvPort.setText("");
+                etvDeptno.setText("");
+                sd.dismiss();
+                mListener.onInit();
+            }
+        });
+        sd.setCancelListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sd.dismiss();
+            }
+        });
+        sd.show(getFragmentManager(), "clearAll");
+
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -163,6 +197,7 @@ public class ConfigFragment extends Fragment {
     public interface OnConfigClickListener {
         void onConfigSave();
         void onConfigCancel();
+        void onInit();
     }
 
     private boolean workerDown = false;

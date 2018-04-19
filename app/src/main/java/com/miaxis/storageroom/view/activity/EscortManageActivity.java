@@ -25,6 +25,7 @@ import com.miaxis.storageroom.comm.UpdateEscortComm;
 import com.miaxis.storageroom.event.CommExecEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
+import com.miaxis.storageroom.service.DownInfoService;
 import com.miaxis.storageroom.service.EscortManageService;
 import com.miaxis.storageroom.util.Constants;
 import com.miaxis.storageroom.util.DateUtil;
@@ -272,6 +273,7 @@ public class EscortManageActivity extends BaseActivity {
                         pdManageEscort.setCancelable(true);
                         if (result == 0) {
                             pdManageEscort.setMessage("更新完成");
+                            DownInfoService.startActionDownEscort(getApplicationContext());
                             pdManageEscort.dismiss();
                             finish();
                         } else {

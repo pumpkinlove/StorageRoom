@@ -52,9 +52,14 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        initConfig();
         fingerDialog = new FingerDialog();
         tvVersion.append(getVersion());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initConfig();
     }
 
     private void initConfig() {
@@ -108,7 +113,7 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
             transaction.replace(R.id.fl_config, fragment);
             transaction.commit();
             flConfig.setVisibility(View.VISIBLE);
-            btnLogin.setVisibility(View.INVISIBLE);
+            btnLogin.setVisibility(View.GONE);
         } else {
             flConfig.setVisibility(View.INVISIBLE);
             btnLogin.setVisibility(View.VISIBLE);
@@ -148,5 +153,10 @@ public class LoginActivity extends BaseActivity implements ConfigFragment.OnConf
     @Override
     public void onConfigCancel() {
         initConfig();
+    }
+
+    @Override
+    public void onInit() {
+
     }
 }

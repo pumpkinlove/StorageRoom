@@ -1,7 +1,6 @@
 package com.miaxis.storageroom.view.fragment;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,28 +24,22 @@ import com.miaxis.storageroom.bean.TaskEscort;
 import com.miaxis.storageroom.bean.Worker;
 import com.miaxis.storageroom.event.ChangeFingerDialogMsgEvent;
 import com.miaxis.storageroom.event.DownTaskFinishEvent;
-import com.miaxis.storageroom.event.GetFingerEvent;
 import com.miaxis.storageroom.event.HandOverDoneEvent;
 import com.miaxis.storageroom.event.ToastEvent;
-import com.miaxis.storageroom.event.VerifyEscortEvent;
-import com.miaxis.storageroom.event.VerifyWorkerEvent;
 import com.miaxis.storageroom.greendao.GreenDaoManager;
 import com.miaxis.storageroom.greendao.gen.EscortDao;
 import com.miaxis.storageroom.greendao.gen.TaskDao;
 import com.miaxis.storageroom.greendao.gen.TaskEscortDao;
 import com.miaxis.storageroom.greendao.gen.WorkerDao;
+import com.miaxis.storageroom.service.DownInfoService;
 import com.miaxis.storageroom.service.DownTaskService;
-import com.miaxis.storageroom.service.FingerService;
 import com.miaxis.storageroom.util.DateUtil;
-import com.miaxis.storageroom.view.activity.GetFingerActivity;
 import com.miaxis.storageroom.view.activity.HandOverActivity;
-import com.miaxis.storageroom.view.custom.FingerDialog;
 import com.miaxis.storageroom.view.custom.ThreeFingerDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,8 +105,8 @@ public class TaskExecFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         onRefresh();
     }
 
@@ -152,7 +144,6 @@ public class TaskExecFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView");
         unbinder.unbind();
     }
 
@@ -164,7 +155,7 @@ public class TaskExecFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        DownTaskService.startActionDownTask(getActivity(), DateUtil.toMonthDay(new Date()));
+        DownTaskService.startActionDownTask(getContext(), DateUtil.toMonthDay(new Date()));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

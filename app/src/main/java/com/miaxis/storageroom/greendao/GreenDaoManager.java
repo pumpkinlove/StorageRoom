@@ -1,11 +1,8 @@
 package com.miaxis.storageroom.greendao;
 
-import android.app.AppOpsManager;
-import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.miaxis.storageroom.app.Storage_App;
 import com.miaxis.storageroom.greendao.gen.ConfigDao;
 import com.miaxis.storageroom.greendao.gen.DaoMaster;
 import com.miaxis.storageroom.greendao.gen.DaoSession;
@@ -16,7 +13,6 @@ import com.miaxis.storageroom.greendao.gen.TaskEscortDao;
 import com.miaxis.storageroom.greendao.gen.TimeStampDao;
 import com.miaxis.storageroom.greendao.gen.WorkerDao;
 
-import java.security.Timestamp;
 
 /**
  * Created by xu.nan on 2017/7/11.

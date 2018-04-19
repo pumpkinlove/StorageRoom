@@ -16,7 +16,6 @@
             android:hint="请填写ip地址"
             android:inputType="number"
             android:digits="1234567890."
-
             android:maxLength="20"
             android:singleLine="true" />
         <EditText
@@ -38,15 +37,26 @@
             android:maxLength="10"
             android:inputType="number"
             android:digits="0123456789"
-
             android:singleLine="true" />
-        <LinearLayout
+
+        <Button
             android:layout_marginTop="10dp"
+            android:id="@+id/btn_init"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/blue_btn_bg"
+            android:gravity="center"
+            android:text="恢复出厂设置"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <Button
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:id="@+id/btn_confirm"
@@ -60,7 +70,7 @@
                 android:textSize="15sp"
                 style="?android:attr/borderlessButtonStyle"/>
             <Button
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:id="@+id/btn_cancel"

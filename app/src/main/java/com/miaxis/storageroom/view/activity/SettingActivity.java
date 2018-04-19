@@ -50,4 +50,10 @@ public class SettingActivity extends BaseActivity implements ConfigFragment.OnCo
     public void onConfigCancel() {
         finish();
     }
+
+    @Override
+    public void onInit() {
+        setResult(RESULT_OK);
+        finish();
+    }
 }
